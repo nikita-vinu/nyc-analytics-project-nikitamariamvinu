@@ -65,6 +65,11 @@ cleaned AS (
         CAST(latitude AS NUMERIC) AS latitude,
         CAST(longitude AS NUMERIC) AS longitude,
 
+        -- Applicant (the licensed professional who filed) - prefixed to avoid clashing with site location
+       CAST(city AS STRING) AS applicant_city,
+       CAST(state AS STRING) AS applicant_state,
+       CAST(zip AS STRING) AS applicant_zip,
+
         -- Staging metadata
         CURRENT_TIMESTAMP() AS _stg_loaded_at
 
