@@ -38,21 +38,3 @@ models:
 
        dot_311:
          +materialized: table
-
-   project_work:
-     staging:
-       +materialized: table
-       +schema: project_staging_data
-
-     marts:
-       +materialized: table
-       +schema: project_warehouse_marts
-      
-       conformed:
-         +materialized: table
-
-       restaurant_inspection:
-         +materialized: table
-
-       dohmh_311:
-         +materialized: table
