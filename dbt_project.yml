@@ -29,10 +29,13 @@ models:
       marts:
         +materialized: table
         +schema: nyc_homework_warehouse_marts
+
         conformed:
           +materialized: table
+
         dob_job_filings:
           +materialized: table
+
         dot_311:
           +materialized: table
 
@@ -44,9 +47,12 @@ models:
       marts:
         +materialized: table
         +schema: project_warehouse_marts
+
         conformed:
           +materialized: table
+
         restaurant_inspection:
           +materialized: table
+          
         dohmh_311:
           +materialized: table
