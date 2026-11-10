@@ -51,7 +51,6 @@ date_dimension AS (
         EXTRACT(MONTH FROM full_date) AS month_number,
         FORMAT_DATE('%B', full_date) AS month_name,
         EXTRACT(DAY FROM full_date) AS day_of_month,
-        EXTRACT(DAYOFMONTH FROM full_date) AS day_of_month,
         FORMAT_DATE('%A', full_date) AS day_of_week_name,
         EXTRACT(DAYOFWEEK FROM full_date) IN (1, 7) AS is_weekend
 
