@@ -1,35 +1,29 @@
-
--- Complaint dimension for NYC 311 DOHMH restaurant service requests
--- Grain: One row per distinct combination of
--- complaint_type, descriptor, descriptor_2, location_type
+-- Complaint type dimension for DOHMH 311 service requests.
+-- Grain: one row per distinct (complaint_type, descriptor, descriptor_2, location_type) combination.
 
 WITH stg_311 AS (
-    SELECT *
-    FROM {{ ref('stg_nyc_311_dohmh') }}
+    SELECT * FROM {{ ref('stg_nyc_311_dohmh') }}
 ),
 
--- Standardize blank values and identify unique combinations
-distinct_complaints AS (
+-- Identify distinct complaint combinations
+distinct_complaint_types AS (
 
     SELECT DISTINCT
-        NULLIF(TRIM(complaint_type), '') AS complaint_type,
-        NULLIF(TRIM(descriptor), '') AS descriptor,
-        NULLIF(TRIM(descriptor_2), '') AS descriptor_2,
-        NULLIF(TRIM(location_type), '') AS location_type
-
+        complaint_type, 
+        descriptor, 
+        descriptor_2,
+        location_type
     FROM stg_311
+    WHERE complaint_type IS NOT NULL
 
-    WHERE NULLIF(TRIM(complaint_type), '') IS NOT NULL
 ),
 
+-- Generate surrogate key for each unique complaint combination
 dim_311_complaint AS (
 
     SELECT
         {{ dbt_utils.generate_surrogate_key([
-            'complaint_type',
-            'descriptor',
-            'descriptor_2',
-            'location_type'
+            'complaint_type', 'descriptor', 'descriptor_2', 'location_type'
         ]) }} AS complaint_key,
 
         complaint_type,
@@ -37,8 +31,9 @@ dim_311_complaint AS (
         descriptor_2,
         location_type
 
-    FROM distinct_complaints
+    FROM distinct_complaint_types
 
 )
 
 SELECT * FROM dim_311_complaint
+
