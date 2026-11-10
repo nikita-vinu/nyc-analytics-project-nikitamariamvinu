@@ -5,7 +5,7 @@ WITH stg_311 AS (
     SELECT * FROM {{ ref('stg_nyc_311_dohmh') }}
 ),
 
--- Identify distinct complaint combinations
+-- Identify distinct status combinations
 distinct_status AS (
 
     SELECT DISTINCT
@@ -16,7 +16,7 @@ distinct_status AS (
 
 ),
 
--- Generate surrogate key for each unique complaint combination
+-- Generate surrogate key for each unique status combination
 dim_311_status AS (
 
     SELECT
