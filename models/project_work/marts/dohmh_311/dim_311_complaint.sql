@@ -1,3 +1,4 @@
+
 -- Complaint type dimension for DOHMH 311 service requests.
 -- Grain: one row per distinct (complaint_type, descriptor, descriptor_2, location_type) combination.
 
@@ -9,8 +10,8 @@ WITH stg_311 AS (
 distinct_complaint_types AS (
 
     SELECT DISTINCT
-        complaint_type, 
-        descriptor, 
+        complaint_type,
+        descriptor,
         descriptor_2,
         location_type
     FROM stg_311
@@ -33,7 +34,22 @@ dim_311_complaint AS (
 
     FROM distinct_complaint_types
 
+),
+
+-- Null placeholder row to handle NULL values
+null_placeholder AS (
+
+    SELECT
+        '-1' AS complaint_key,
+        CAST(NULL AS STRING) AS complaint_type,
+        CAST(NULL AS STRING) AS descriptor,
+        CAST(NULL AS STRING) AS descriptor_2,
+        CAST(NULL AS STRING) AS location_type
+
 )
 
 SELECT * FROM dim_311_complaint
 
+UNION ALL
+
+SELECT * FROM null_placeholder

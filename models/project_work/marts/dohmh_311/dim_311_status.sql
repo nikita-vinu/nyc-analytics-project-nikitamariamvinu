@@ -1,3 +1,4 @@
+
 -- Status dimension for DOHMH 311 service requests.
 -- Grain: one row per distinct (status, resolution_description) combination.
 
@@ -9,7 +10,7 @@ WITH stg_311 AS (
 distinct_status AS (
 
     SELECT DISTINCT
-        status, 
+        status,
         resolution_description
     FROM stg_311
     WHERE status IS NOT NULL
@@ -21,7 +22,7 @@ dim_311_status AS (
 
     SELECT
         {{ dbt_utils.generate_surrogate_key([
-            'status','resolution_description'
+            'status', 'resolution_description'
         ]) }} AS status_key,
 
         status,
@@ -29,7 +30,20 @@ dim_311_status AS (
 
     FROM distinct_status
 
+),
+
+-- Null placeholder row to handle NULL values
+null_placeholder AS (
+
+    SELECT
+        '-1' AS status_key,
+        CAST(NULL AS STRING) AS status,
+        CAST(NULL AS STRING) AS resolution_description
+
 )
 
 SELECT * FROM dim_311_status
 
+UNION ALL
+
+SELECT * FROM null_placeholder
