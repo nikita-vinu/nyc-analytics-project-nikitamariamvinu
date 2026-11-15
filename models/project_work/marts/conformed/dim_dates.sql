@@ -43,8 +43,7 @@ all_dates AS (
 date_dimension AS (
 
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['full_date']) }} AS date_key,
-
+        CAST(FORMAT_DATE('%Y%m%d', full_date) AS INT64) AS date_key,
         full_date,
         EXTRACT(YEAR FROM full_date) AS calendar_year,
         EXTRACT(QUARTER FROM full_date) AS calendar_quarter,
@@ -56,31 +55,7 @@ date_dimension AS (
 
     FROM all_dates
 
-),
-
--- Null placeholder row: to handle NULL values.
--- Building fact tables should COALESCE a null source date to this key
--- Keeps all fact and date_dim joins INNER JOINs safely
--- Kimball convention to be explicit. (More to come on this)
-
-null_placeholder AS (
-
-    SELECT
-        '-1' AS date_key,
-        CAST(NULL AS DATE) AS full_date,
-        CAST(NULL AS INT64) AS calendar_year,
-        CAST(NULL AS INT64) AS calendar_quarter,
-        CAST(NULL AS INT64) AS month_number,
-        CAST(NULL AS STRING) AS month_name,
-        CAST(NULL AS INT64) AS day_of_month,
-        CAST(NULL AS STRING) AS day_of_week_name,
-        CAST(NULL AS BOOLEAN) AS is_weekend
-) 
--- make sure BQ knows the col types
-
+)
 
 SELECT * FROM date_dimension
 
-UNION ALL
-
-SELECT * FROM null_placeholder
