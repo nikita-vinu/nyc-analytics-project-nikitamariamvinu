@@ -41,7 +41,7 @@ null_placeholder AS (
 
     SELECT
         '-1' AS complaint_key,
-        CAST(NULL AS STRING) AS complaint_type,
+        'Unknown' AS complaint_type,
         CAST(NULL AS STRING) AS descriptor,
         CAST(NULL AS STRING) AS descriptor_2,
         CAST(NULL AS STRING) AS location_type
