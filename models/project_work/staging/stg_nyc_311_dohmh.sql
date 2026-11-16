@@ -65,7 +65,7 @@ cleaned AS (
             ELSE 'UNKNOWN or CITYWIDE'
         END AS borough,
 
-       -- Standardized Community Board suusing '###' format 
+       -- Standardized Community Board using '###' format 
         CASE
             WHEN REGEXP_CONTAINS(UPPER(TRIM(community_board)), r'^\d{2} (MANHATTAN|BRONX|BROOKLYN|QUEENS|STATEN ISLAND)$')
                 THEN CONCAT(CASE REGEXP_EXTRACT(UPPER(TRIM(community_board)), r'^\d{2} (.+)$')
